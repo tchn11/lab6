@@ -15,7 +15,6 @@ import java.util.Stack;
  * Operates with commands. Choose what command should be called.
  */
 public class CommandManager {
-    private Scanner scanner;
     private Commandable[] commands;
     private CollectionManager collectionManager;
     private String History[];
@@ -23,11 +22,9 @@ public class CommandManager {
     /**
      * Constructor, set start values
      * @param col Collection manager
-     * @param sc Scanner
      * @param comm Array of all commands (implements from Commandable)
      */
-    public CommandManager(CollectionManager col, Scanner sc, Commandable[] comm){
-        scanner = sc;
+    public CommandManager(CollectionManager col, Commandable[] comm){
         commands = comm;
         collectionManager = col;
         History = new String[7];
