@@ -13,6 +13,9 @@ import java.nio.channels.SocketChannel;
 import messages.Status;
 import server.commands.CommandManager;
 
+/**
+ * Main class for server, connect and send
+ */
 public class Server {
     private int port;
     private int timeout;
@@ -28,6 +31,10 @@ public class Server {
         commandManager = com;
     }
 
+    /**
+     * Open and set server
+     * @return All right or not
+     */
     private boolean openSocket(){
         try {
             Main.logger.info("Начинаю запуск сервера");
@@ -37,16 +44,17 @@ public class Server {
             Main.logger.info("Сервер успешно запущен");
             return true;
         } catch (IllegalArgumentException exception) {
-            Main.printError("Порт '" + port + "' находится за пределами возможных значений");
             Main.logger.fatal("Порт '" + port + "' находится за пределами возможных значений");
             return false;
         }catch (IOException exception) {
-            Main.printError("Произошла ошибка при попытке использовать порт");
             Main.logger.fatal("Произошла ошибка при попытке использовать порт");
             return false;
         }
     }
 
+    /**
+     * Close server in end of work
+     */
     private  void closeSocket(){
         try{
             Main.logger.info("Пытаюсь закрыть сокет");
@@ -57,6 +65,9 @@ public class Server {
         }
     }
 
+    /**
+     * Wait for client and set connection with him
+     */
     private void startTransmission(){
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         try {
@@ -68,11 +79,14 @@ public class Server {
             Main.logger.info("Разрешение на чтение и запись получено");
             Main.logger.info("Уcтановлено соединение с клиентом");
         } catch (IOException exception) {
-            Main.printError("Ошибка подключения к клиенту");
             Main.logger.error("Ошибка подключения к клиенту");
         }
     }
 
+    /**
+     * Read object from client
+     * @return Object witch was send
+     */
     private Object readObj(){
         try{
             Main.logger.info("Начинаю чтение объекта");
@@ -87,6 +101,11 @@ public class Server {
         return null;
     }
 
+    /**
+     * Send answer to user
+     * @param answerMsg Message
+     * @return All right or not
+     */
     private boolean sendAnswer(AnswerMsg answerMsg){
         try{
             Main.logger.info("Отправляю ответ: " + answerMsg.getMessage());
@@ -100,6 +119,9 @@ public class Server {
         return false;
     }
 
+    /**
+     * End transmission with current user if error happened (need wait next)
+     */
     private void endTransmission(){
         try {
             Main.logger.info("Закрываю соединение");
@@ -108,11 +130,13 @@ public class Server {
             ous.close();
             Main.logger.info("Соединение успешно закрыто");
         } catch (IOException exception) {
-            Main.printError("Ошибка чтения данных");
             Main.logger.error("Ошибка закрытия соеденения");
         }
     }
 
+    /**
+     * Main run class, read client, execute and answer
+     */
     public void run() {
         if (!openSocket())
             return;

@@ -6,7 +6,10 @@ import server.collection.CollectionManager;
 import server.commands.*;
 import server.file.FileManager;
 
-
+/**
+ * Main class for server
+ * @author Konanykhina Antonina
+ */
 public class Main {
     public static Logger logger = LogManager.getLogger("ServerLogger");
     public static final int PORT = 1821;
@@ -33,10 +36,4 @@ public class Main {
         server.run();
     }
 
-    public static void printError(String msg){
-        System.out.println("err: " + msg);
-    }
-    public static void print(String msg){
-        System.out.println(msg);
-    }
 }

@@ -12,9 +12,6 @@ import java.lang.reflect.Type;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
-import static server.Main.print;
-import static server.Main.printError;
-
 /**
  * Operates the main collection file for saving/loading.
  */

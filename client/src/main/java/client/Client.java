@@ -14,6 +14,10 @@ import java.net.UnknownHostException;
 import static client.console.ConsoleManager.print;
 import static client.console.ConsoleManager.printErr;
 
+
+/**
+ * Class working with connection
+ */
 public class Client {
     private String serverHost;
     private int serverPort;
@@ -37,6 +41,10 @@ public class Client {
         consoleManager = cons;
     }
 
+    /**
+     * Connect client to server
+     * @return is closed successfully or not
+     */
     private boolean connectToServer(){
         try {
             if (attempts > 0)
@@ -59,6 +67,11 @@ public class Client {
         return true;
     }
 
+    /**
+     * Method write message to server in CommandMsg format
+     * @param msg message
+     * @throws ConnectionBrokenException If connection was broken
+     */
     private void writeMessage(CommandMsg msg) throws ConnectionBrokenException {
         try{
             serverWriter.writeObject(msg);
@@ -68,6 +81,11 @@ public class Client {
         }
     }
 
+    /**
+     * Read message from server in AnswerMsg format
+     * @return Message
+     * @throws ConnectionBrokenException If connection was broken
+     */
     private AnswerMsg readMessage() throws ConnectionBrokenException{
         AnswerMsg retMsg = null;
         try {
@@ -81,7 +99,9 @@ public class Client {
         return retMsg;
     }
 
-
+    /**
+     * Close connection when everything end.
+     */
     private void closeConnection(){
         try{
             socket.close();
@@ -92,6 +112,9 @@ public class Client {
         }
     }
 
+    /**
+     * Main function witch get command and send.
+     */
     public void run(){
         boolean work = true;
         print("Подключаюсь к серверу");
@@ -158,6 +181,7 @@ public class Client {
                 }
             }
         }
+        closeConnection();
     }
 
 }

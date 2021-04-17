@@ -47,7 +47,7 @@ public class ScriptManager {
     }
 
     /**
-     * Method that ask group from user
+     * Method that ask group from file
      * @return Group
      */
     public RowStudyGroup askGroup()
@@ -132,7 +132,7 @@ public class ScriptManager {
 
 
     /**
-     * Ask String from console
+     * Ask String from file
      * @return Result of parsing
      */
     public String parseString(){
@@ -154,7 +154,7 @@ public class ScriptManager {
     }
 
     /**
-     * Pars integer number from console
+     * Pars integer number from file
       * @return Result of parsing
      */
     public Integer parseInteger(){
@@ -179,7 +179,7 @@ public class ScriptManager {
     }
 
     /**
-     * Pars Long number from console
+     * Pars Long number from file
      * @return Result of parsing
      */
     public Long parseLong(){
@@ -228,7 +228,7 @@ public class ScriptManager {
         return null;
     }
     /**
-     * Pars date and time from console
+     * Pars date and time from file
      * @return Result of parsing
      */
     public java.time.LocalDateTime parseDate(){

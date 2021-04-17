@@ -36,7 +36,11 @@ public class CommandManager {
         openedScripts = new Stack<String>();
     }
 
-
+    /**
+     * Execute command
+     * @param commandMsg Command witch should be executed
+     * @param ans What should return
+     */
     public void executeCommand(CommandMsg commandMsg, AnswerMsg ans){
         Main.logger.info("Выполняется команда " + commandMsg.getCommandName() + " " + commandMsg.getCommandStringArgument());
         if (commandMsg.getCommandName().trim().equals("help")) {
@@ -106,6 +110,7 @@ public class CommandManager {
     /**
      * Script mode. Open script and do it.
      * @param file Script file
+     * @param ans Witch should return to user
      */
     private void ScriptMode(String file, AnswerMsg ans) {
         ScriptManager scriptManager = new ScriptManager(file.trim());

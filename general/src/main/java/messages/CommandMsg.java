@@ -2,6 +2,9 @@ package messages;
 
 import java.io.Serializable;
 
+/**
+ * Message witch include command and arguments
+ */
 public class CommandMsg implements Serializable {
     private String commandName;
     private String commandStringArgument;
@@ -32,17 +35,5 @@ public class CommandMsg implements Serializable {
      */
     public Object getCommandObjectArgument() {
         return commandObjectArgument;
-    }
-
-    /**
-     * @return Is this request empty.
-     */
-    public boolean isEmpty() {
-        return commandName.isEmpty() && commandStringArgument.isEmpty() && commandObjectArgument == null;
-    }
-
-    @Override
-    public String toString() {
-        return "Msg[" + commandName + ", " + commandStringArgument + ", " + commandObjectArgument + "]";
     }
 }

@@ -3,6 +3,9 @@ package general.data;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Class like person, but can be sent and without any data witch will be generated
+ */
 public class RowStudyGroup  implements Serializable {
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null

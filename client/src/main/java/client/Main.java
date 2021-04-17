@@ -3,7 +3,10 @@ package client;
 import client.console.ConsoleManager;
 
 import java.util.Scanner;
-
+/**
+ * Main class for client
+ * @author Konanykhina Antonina
+ */
 public class Main {
     public static void main(String[] args) {
         int recconectAtmpts = 20;
