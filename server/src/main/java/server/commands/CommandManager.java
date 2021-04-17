@@ -39,6 +39,7 @@ public class CommandManager {
 
 
     public void executeCommand(CommandMsg commandMsg, AnswerMsg ans){
+        Main.logger.info("Выполняется команда " + commandMsg.getCommandName() + " " + commandMsg.getCommandStringArgument());
         if (commandMsg.getCommandName().trim().equals("help")) {
             ans.AddAnswer("help : вывести справку по доступным командам");
             ans.AddAnswer("execute_script file_name : считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.");

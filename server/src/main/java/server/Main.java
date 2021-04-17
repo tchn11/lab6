@@ -11,7 +11,7 @@ public class Main {
     public static final int CONNECTION_TIMEOUT = 60000;
 
     public static void main(String[] args) {
-        Server server = new Server(PORT, CONNECTION_TIMEOUT);
+
 
     }
 

@@ -1,20 +1,28 @@
 package server;
 
+import messages.AnswerMsg;
+import messages.CommandMsg;
+
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
+import messages.Status;
+import server.commands.CommandManager;
+
 public class Server {
     private int port;
     private int timeout;
     private ServerSocketChannel socketChannel;
     private SocketChannel clientChanel;
+    private CommandManager commandManager;
 
-    public Server(int in_port, int in_timeout){
+    public Server(int in_port, int in_timeout, CommandManager com){
         port = in_port;
         timeout = in_timeout;
+        commandManager = com;
     }
 
     private boolean openSocket(){
@@ -77,14 +85,17 @@ public class Server {
         return null;
     }
 
-    private String readString(){
-        Object obj = readObj();
-        if (obj == null){
-            Main.logger.info("Не получено ничего");
-            return "";
+    private void sendAnswer(AnswerMsg answerMsg){
+        try{
+            Main.logger.info("Отправляю ответ");
+            ObjectOutputStream ous = new ObjectOutputStream(clientChanel.socket().getOutputStream());
+            ous.writeObject(answerMsg);
+            Main.logger.info("Ответ отправлен");
+            ous.close();
+            Main.logger.info("Закрыт ObjectOutputStream");
+        } catch (IOException exception) {
+            Main.logger.error("Ошибка отправки ответа");
         }
-        Main.logger.info("Получена строка: " + (String) obj);
-        return (String) obj;
     }
 
     private boolean endTransmission(){
@@ -105,8 +116,16 @@ public class Server {
             return;
         boolean wokrking = true;
         while (wokrking) {
-
+            startTransmission();
+            CommandMsg commandMsg = (CommandMsg) readObj();
+            AnswerMsg answerMsg = new AnswerMsg();
+            commandManager.executeCommand(commandMsg, answerMsg);
+            sendAnswer(answerMsg);
+            endTransmission();
+            if (answerMsg.getStatus() == Status.EXIT)
+                wokrking = false;
         }
-
+        Main.logger.info("Конец завершение работы");
+        closeSocket();
     }
 }
