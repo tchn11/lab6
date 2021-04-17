@@ -3,7 +3,6 @@ package client.console;
 import general.data.*;
 import general.exeptions.EmptyIOException;
 
-import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
@@ -27,7 +26,7 @@ public class ConsoleManager {
      * Static method to print from any part of program
      * @param msg Message
      */
-    static public void Print(String msg)
+    static public void print(String msg)
     {
         System.out.println(msg);
     }
@@ -36,9 +35,9 @@ public class ConsoleManager {
      * Static method to print error notification
      * @param msg Message
      */
-    static public void PrintErr(String msg)
+    static public void printErr(String msg)
     {
-        System.out.println("Err: " + msg);
+        System.out.println("err: " + msg);
     }
 
     /**
@@ -55,7 +54,7 @@ public class ConsoleManager {
         while (true){
             x = parseLong("Введите кординату X");
             if (x > 752){
-                Print("Число должно быть меньше 752");
+                print("Число должно быть меньше 752");
             }
             else {
                 break;
@@ -69,7 +68,7 @@ public class ConsoleManager {
         while (true){
             stdC = parseInteger("Введите количество студентов:");
             if(stdC <= 0){
-                Print("Число болжно быть больше 0");
+                print("Число болжно быть больше 0");
             }
             else{
                 break;
@@ -81,7 +80,7 @@ public class ConsoleManager {
         while (true){
             expSt = parseInteger("Введите количество отчисленных студентов:");
             if(expSt <= 0){
-                Print("Число болжно быть больше 0");
+                print("Число болжно быть больше 0");
             }
             else{
                 break;
@@ -93,7 +92,7 @@ public class ConsoleManager {
         while (true){
             evMark = parseLong("Введите среднюю оценку:");
             if(evMark <= 0){
-                Print("Число болжно быть больше 0");
+                print("Число болжно быть больше 0");
             }
             else{
                 break;
@@ -111,7 +110,7 @@ public class ConsoleManager {
         while (true){
             admWeight = parseLong("Введите вес админа:");
             if(admWeight <= 0){
-                Print("Число болжно быть больше 0");
+                print("Число болжно быть больше 0");
             }
             else{
                 break;
@@ -134,7 +133,7 @@ public class ConsoleManager {
 
         while (str == null){
             try {
-                Print(msg);
+                print(msg);
                 String buf = scanner.nextLine().trim();
                 if (buf.equals(""))
                     throw new EmptyIOException();
@@ -143,7 +142,7 @@ public class ConsoleManager {
                 str = buf;
             }
             catch (EmptyIOException e){
-                PrintErr("Ввод не может быть пустым");
+                printErr("Ввод не может быть пустым");
             }
 
         }
@@ -161,7 +160,7 @@ public class ConsoleManager {
 
         while (out == null){
             try {
-                Print(msg);
+                print(msg);
                 String buf = scanner.nextLine().trim();
                 if (buf.equals(""))
                     throw new EmptyIOException();
@@ -170,10 +169,10 @@ public class ConsoleManager {
                 out = Integer.parseInt(buf);
             }
             catch (EmptyIOException e){
-                PrintErr("Ввод не может быть пустым");
+                printErr("Ввод не может быть пустым");
             }
             catch (NumberFormatException e){
-                PrintErr("Введите число");
+                printErr("Введите число");
             }
 
         }
@@ -191,7 +190,7 @@ public class ConsoleManager {
 
         while (out == null){
             try {
-                Print(msg);
+                print(msg);
                 String buf = scanner.nextLine().trim();
                 if (buf.equals(""))
                     throw new EmptyIOException();
@@ -200,10 +199,10 @@ public class ConsoleManager {
                 out = Long.parseLong(buf);
             }
             catch (EmptyIOException e){
-                PrintErr("Ввод не может быть пустым");
+                printErr("Ввод не может быть пустым");
             }
             catch (NumberFormatException e){
-                PrintErr("Введите число");
+                printErr("Введите число");
             }
 
         }
@@ -221,8 +220,8 @@ public class ConsoleManager {
 
         while (out == null){
             try {
-                Print(msg);
-                Print("Варианты:\n" + Semester.nameList());
+                print(msg);
+                print("Варианты:\n" + Semester.nameList());
                 String buf = scanner.nextLine().trim();
                 if (buf.equals(""))
                     throw new EmptyIOException();
@@ -231,10 +230,10 @@ public class ConsoleManager {
                 out = Semester.valueOf(buf);
             }
             catch (EmptyIOException e){
-                PrintErr("Ввод не может быть пустым");
+                printErr("Ввод не может быть пустым");
             }
             catch (IllegalArgumentException e){
-                PrintErr("Введите элемент из списка");
+                printErr("Введите элемент из списка");
             }
 
         }
@@ -253,8 +252,8 @@ public class ConsoleManager {
 
         while (out == null){
             try {
-                Print(msg);
-                Print("Формат: yyyy-MM-dd HH:mm");
+                print(msg);
+                print("Формат: yyyy-MM-dd HH:mm");
                 String buf = scanner.nextLine().trim();
                 if (buf.equals(""))
                     throw new EmptyIOException();
@@ -263,10 +262,10 @@ public class ConsoleManager {
                 out = java.time.LocalDateTime.parse(buf, formatter);
             }
             catch (EmptyIOException e){
-                PrintErr("Ввод не может быть пустым");
+                printErr("Ввод не может быть пустым");
             }
             catch (java.time.format.DateTimeParseException e){
-                PrintErr("Введите дату");
+                printErr("Введите дату");
             }
 
         }
@@ -274,13 +273,6 @@ public class ConsoleManager {
         return out;
     }
 
-    public static void print(String str){
-        System.out.println(str);
-    }
-
-    public static void printErr(String str){
-        System.out.println("error: " + str);
-    }
 
     public void waitCommand(){
         command = new String[]{"", ""};

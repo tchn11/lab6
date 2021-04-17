@@ -49,7 +49,7 @@ public class Client {
             printErr("Неизвестный хост: " + serverHost);
             return false;
         } catch (IOException exception) {
-            printErr("Ошибка открытия порта" + serverPort);
+            printErr("Ошибка открытия порта " + serverPort);
             return false;
         }
         print("Порт успешно открыт.");
