@@ -4,6 +4,7 @@ import messages.AnswerMsg;
 import messages.CommandMsg;
 
 import java.io.*;
+import java.lang.management.MonitorInfo;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
@@ -18,6 +19,8 @@ public class Server {
     private ServerSocketChannel socketChannel;
     private SocketChannel clientChanel;
     private CommandManager commandManager;
+    private ObjectInputStream ois;
+    private ObjectOutputStream ous;
 
     public Server(int in_port, int in_timeout, CommandManager com){
         port = in_port;
@@ -59,6 +62,10 @@ public class Server {
         try {
             Main.logger.info("Вхожу в ожидание соединения");
             clientChanel = socketChannel.accept();
+            Main.logger.info("Получаю разреение на чтение и запись");
+            ois = new ObjectInputStream(clientChanel.socket().getInputStream());
+            ous = new ObjectOutputStream(clientChanel.socket().getOutputStream());
+            Main.logger.info("Разрешение на чтение и запись получено");
             Main.logger.info("Уcтановлено соединение с клиентом");
             return true;
         } catch (IOException exception) {
@@ -71,38 +78,36 @@ public class Server {
     private Object readObj(){
         try{
             Main.logger.info("Начинаю чтение объекта");
-            ObjectInputStream ois = new ObjectInputStream(clientChanel.socket().getInputStream());
-            Main.logger.info("Начинаю получать объект");
             Object obj = ois.readObject();
             Main.logger.info("Объект получен");
-            ois.close();
             return obj;
         } catch (IOException exception) {
-            Main.logger.error("Ошибка создния объекта ObjectInputStream");
+            Main.logger.error("Разрыв соеденения");
         } catch (ClassNotFoundException exception) {
             Main.logger.error("Ошибка получения объекта");
         }
         return null;
     }
 
-    private void sendAnswer(AnswerMsg answerMsg){
+    private boolean sendAnswer(AnswerMsg answerMsg){
         try{
             Main.logger.info("Отправляю ответ");
-            ObjectOutputStream ous = new ObjectOutputStream(clientChanel.socket().getOutputStream());
             ous.writeObject(answerMsg);
             ous.flush();
             Main.logger.info("Ответ отправлен");
-            ous.close();
-            Main.logger.info("Закрыт ObjectOutputStream");
+            return true;
         } catch (IOException exception) {
-            Main.logger.error("Ошибка отправки ответа");
+            Main.logger.error("Разрыв соеденения");
         }
+        return false;
     }
 
     private boolean endTransmission(){
         try {
             Main.logger.info("Закрываю соединение");
             clientChanel.close();
+            ois.close();
+            ous.close();
             Main.logger.info("Соединение успешно закрыто");
             return true;
         } catch (IOException exception) {
@@ -116,17 +121,31 @@ public class Server {
         if (!openSocket())
             return;
         boolean wokrking = true;
+        boolean reconect = true;
         while (wokrking) {
-            startTransmission();
-            CommandMsg commandMsg = (CommandMsg) readObj();
+            if (reconect){
+                startTransmission();
+                reconect = false;
+            }
+            Object obj = readObj();
+            if (obj == null){
+                endTransmission();
+                reconect = true;
+                continue;
+            }
+            CommandMsg commandMsg = (CommandMsg) obj;
             AnswerMsg answerMsg = new AnswerMsg();
             commandManager.executeCommand(commandMsg, answerMsg);
-            sendAnswer(answerMsg);
-            endTransmission();
+            if (!sendAnswer(answerMsg)){
+                endTransmission();
+                reconect = true;
+                continue;
+            }
             if (answerMsg.getStatus() == Status.EXIT)
                 wokrking = false;
         }
         Main.logger.info("Конец завершение работы");
+        endTransmission();
         closeSocket();
     }
 }

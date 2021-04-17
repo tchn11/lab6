@@ -43,8 +43,11 @@ public class Client {
                 print("Попытка переподключиться");
             attempts++;
             socket = new Socket(serverHost, serverPort);
+            print("Получаю разрешение на чтение и запись");
             serverWriter = new ObjectOutputStream(socket.getOutputStream());
+            print("Получено разрешение на запись");
             serverReader = new ObjectInputStream(socket.getInputStream());
+            print("Получено разрешение на чтение");
         } catch (UnknownHostException e) {
             printErr("Неизвестный хост: " + serverHost);
             return false;
@@ -91,6 +94,7 @@ public class Client {
 
     public void run(){
         boolean work = true;
+        print("Подключаюсь к серверу");
         while (!connectToServer()) {
             if(attempts > connectionAttempts){
                 printErr("Превышено количество попыток подключиться");
@@ -104,7 +108,9 @@ public class Client {
             }
 
         }
+        print("Подключился, работаю");
         while (work){
+            print("Жду команду");
             consoleManager.waitCommand();
             RowStudyGroup studyGroup = null;
             if (consoleManager.getCommand().equals("add")){
@@ -139,14 +145,16 @@ public class Client {
                 }
 
             }
-            if (answ.getStatus() == Status.ERROR){
-                print("При выполнении приграммы произошла ошибка");
-                print(answ.getMessage());
-            } else {
-                print(answ.getMessage());
-            }
-            if (answ.getStatus() == Status.EXIT){
-                work = false;
+            if (answ != null) {
+                if (answ.getStatus() == Status.ERROR) {
+                    print("При выполнении приграммы произошла ошибка");
+                    print(answ.getMessage());
+                } else {
+                    print(answ.getMessage());
+                }
+                if (answ.getStatus() == Status.EXIT) {
+                    work = false;
+                }
             }
         }
     }
