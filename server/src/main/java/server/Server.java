@@ -59,7 +59,7 @@ public class Server {
         try {
             Main.logger.info("Вхожу в ожидание соединения");
             clientChanel = socketChannel.accept();
-            Main.logger.info("Учитановлено соединение с клиентом");
+            Main.logger.info("Уcтановлено соединение с клиентом");
             return true;
         } catch (IOException exception) {
             Main.printError("Ошибка подключения к клиенту");
@@ -90,6 +90,7 @@ public class Server {
             Main.logger.info("Отправляю ответ");
             ObjectOutputStream ous = new ObjectOutputStream(clientChanel.socket().getOutputStream());
             ous.writeObject(answerMsg);
+            ous.flush();
             Main.logger.info("Ответ отправлен");
             ous.close();
             Main.logger.info("Закрыт ObjectOutputStream");
