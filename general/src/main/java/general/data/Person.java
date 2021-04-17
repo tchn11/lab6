@@ -1,11 +1,12 @@
 package general.data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * Person class.
  */
-public class Person {
+public class Person  implements Serializable {
     private String name; //Поле не может быть null, Строка не может быть пустой
     private LocalDateTime birthday; //Поле может быть null
     private Long weight; //Поле не может быть null, Значение поля должно быть больше 0

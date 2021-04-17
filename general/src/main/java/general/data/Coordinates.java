@@ -1,10 +1,12 @@
 package general.data;
 
 
+import java.io.Serializable;
+
 /**
  * X-Y coordinates
  */
-public class Coordinates {
+public class Coordinates implements Serializable {
     private long x; //Максимальное значение поля: 752
     private int y;
 
