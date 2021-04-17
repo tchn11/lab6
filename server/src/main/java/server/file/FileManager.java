@@ -39,6 +39,7 @@ public class FileManager {
         }
         Gson gson;
         gson = new Gson();
+        Main.logger.info("Открываю фаил " + path);
         try {
             BufferedReader reader = new BufferedReader(new FileReader(path));
             Stack<StudyGroup> bufferCollection;

@@ -1,5 +1,7 @@
 package server.commands;
 
+import general.data.RowStudyGroup;
+import general.data.StudyGroup;
 import messages.AnswerMsg;
 import messages.CommandMsg;
 import messages.Status;
@@ -41,6 +43,7 @@ public class CommandManager {
             ans.AddAnswer("help : вывести справку по доступным командам");
             ans.AddAnswer("execute_script file_name : считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.");
             ans.AddAnswer("history : вывести последние 7 команд (без их аргументов)");
+            ans.AddAnswer("exit : завершить программу (без сохранения в файл)");
             for (Commandable comman : commands) {
                 ans.AddAnswer(comman.getName() + comman.getDescription());
             }
@@ -117,6 +120,10 @@ public class CommandManager {
                 break;
             }
             if (cmd[0].trim().equals("help")) {
+                ans.AddAnswer("help : вывести справку по доступным командам");
+                ans.AddAnswer("execute_script file_name : считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.");
+                ans.AddAnswer("history : вывести последние 7 команд (без их аргументов)");
+                ans.AddAnswer("exit : завершить программу (без сохранения в файл)");
                 for (Commandable comman : commands) {
                     ans.AddAnswer(comman.getName() + comman.getDescription());
                 }
@@ -138,19 +145,29 @@ public class CommandManager {
                     }
                 }
                 else{
-                    //PrintErr("Введите имя файла");
+                    ans.AddErrorMsg("Введите имя файла");
                 }
             }
             else if (!cmd[0].trim().equals("")){
                 boolean isFindCommand = false;
                 for (Commandable comman : commands) {
                     if (cmd[0].trim().equals(comman.getName())) {
-                        //comman.execute(cmd[1]);
+                        RowStudyGroup rowStudyGroup = null;
+                        if (cmd[0].trim().equals("add") | cmd[0].trim().equals("update")
+                                | cmd[0].trim().equals("add_if_max")){
+                            isFindCommand = true;
+                            rowStudyGroup = scriptManager.askGroup();
+                            if (rowStudyGroup == null){
+                                ans.AddErrorMsg("Ошибка парсинга объекта из файла");
+                                break;
+                            }
+                        }
+                        comman.execute(cmd[1], rowStudyGroup, ans);
                         isFindCommand = true;
                     }
                 }
                 if (!isFindCommand){
-                    ans.AddAnswer("Нет такой команды: " + cmd[0]+ " " + cmd[1]);
+                    ans.AddErrorMsg("Нет такой команды: " + cmd[0]+ " " + cmd[1]);
                 }
             }
             if(!cmd[0].trim().equals("")) {

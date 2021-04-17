@@ -89,6 +89,10 @@ public class StudyGroup {
         return groupAdmin;
     }
 
+    public long getNum(){
+        return (id + studentsCount + expelledStudents + averageMark);
+    }
+
     @Override
     public String toString() {
         return "Учебная группа {" +

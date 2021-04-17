@@ -34,7 +34,7 @@ public class Main {
     }
 
     public static void printError(String msg){
-        System.out.println("error: " + msg);
+        System.out.println("err: " + msg);
     }
     public static void print(String msg){
         System.out.println(msg);

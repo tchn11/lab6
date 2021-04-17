@@ -108,12 +108,13 @@ public class Client {
             }
 
         }
-        print("Подключился, работаю");
+        //print("Подключился, работаю");
         while (work){
-            print("Жду команду");
+            //print("Жду команду");
             consoleManager.waitCommand();
             RowStudyGroup studyGroup = null;
-            if (consoleManager.getCommand().equals("add")){
+            if (consoleManager.getCommand().equals("add") | consoleManager.getCommand().equals("update")
+            | consoleManager.getCommand().equals("add_if_max")){
                 studyGroup = consoleManager.askGroup();
             }
             CommandMsg send = new CommandMsg(consoleManager.getCommand(), consoleManager.getArg(), studyGroup);

@@ -36,6 +36,7 @@ public class AddCommand implements Commandable{
     public boolean execute(String arg, Object obArg, AnswerMsg ans) {
         RowStudyGroup sg = (RowStudyGroup) obArg;
         StudyGroup studyGroup = new StudyGroup(collectionManager.generateNextId(), sg);
+        collectionManager.add(studyGroup);
         Main.logger.info("Добавлен новый элемент в коллекцию: " + studyGroup.toString());
         ans.AddAnswer("Успешно добавлен элемент в коллекцию:\n" + studyGroup.toString());
         return true;

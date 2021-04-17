@@ -18,7 +18,7 @@ public class AnswerMsg implements Serializable {
     }
 
     public void AddErrorMsg(String str){
-        Msg += "error: " + str;
+        Msg += "err: " + str + "\n";
     }
 
     public void AddStatus(Status st){

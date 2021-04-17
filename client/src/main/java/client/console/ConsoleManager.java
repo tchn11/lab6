@@ -282,7 +282,6 @@ public class ConsoleManager {
                 command = (line .trim()+ " ").split(" ", 2);
             }
         }
-        print(command.toString());
     }
 
     public String getCommand(){

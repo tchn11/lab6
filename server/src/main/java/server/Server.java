@@ -57,7 +57,7 @@ public class Server {
         }
     }
 
-    private boolean startTransmission(){
+    private void startTransmission(){
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         try {
             Main.logger.info("Вхожу в ожидание соединения");
@@ -67,11 +67,9 @@ public class Server {
             ous = new ObjectOutputStream(clientChanel.socket().getOutputStream());
             Main.logger.info("Разрешение на чтение и запись получено");
             Main.logger.info("Уcтановлено соединение с клиентом");
-            return true;
         } catch (IOException exception) {
             Main.printError("Ошибка подключения к клиенту");
             Main.logger.error("Ошибка подключения к клиенту");
-            return false;
         }
     }
 
@@ -91,7 +89,7 @@ public class Server {
 
     private boolean sendAnswer(AnswerMsg answerMsg){
         try{
-            Main.logger.info("Отправляю ответ");
+            Main.logger.info("Отправляю ответ: " + answerMsg.getMessage());
             ous.writeObject(answerMsg);
             ous.flush();
             Main.logger.info("Ответ отправлен");
@@ -102,18 +100,16 @@ public class Server {
         return false;
     }
 
-    private boolean endTransmission(){
+    private void endTransmission(){
         try {
             Main.logger.info("Закрываю соединение");
             clientChanel.close();
             ois.close();
             ous.close();
             Main.logger.info("Соединение успешно закрыто");
-            return true;
         } catch (IOException exception) {
             Main.printError("Ошибка чтения данных");
             Main.logger.error("Ошибка закрытия соеденения");
-            return false;
         }
     }
 

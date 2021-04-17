@@ -6,6 +6,7 @@ import server.file.FileManager;
 
 import java.util.Collections;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 
 /**
@@ -69,11 +70,9 @@ public class CollectionManager {
      * @return List of elements
      */
     public String getList(){
-        String list = "";
-        for (StudyGroup gr : myCollection){
-            list += gr.toString() + "\n";
-        }
-        return list;
+        if (myCollection.empty())
+            return "Колекция пуста";
+        return myCollection.stream().reduce("", (sum, m) -> sum += m + "\n\n", (sum1, sum2) -> sum1 + sum2).trim();
     }
 
     /**
@@ -89,14 +88,9 @@ public class CollectionManager {
      * @param sg Element
      */
     public void updateElement(StudyGroup sg){
-        for (StudyGroup group : myCollection){
-            if(group.getId() == sg.getId())
-            {
-                Collections.replaceAll(myCollection, group, sg);
-                Main.logger.info("Успешно заменено.");
-                return;
-            }
-        }
+        myCollection = myCollection.stream()
+                .map(studyGroup -> studyGroup.getId().equals(sg.getId()) ? sg : studyGroup)
+                .collect(Collectors.toCollection(Stack::new));
     }
 
     /**
@@ -120,13 +114,7 @@ public class CollectionManager {
      * @param id ID
      */
     public void removeID(Integer id){
-        for (StudyGroup sg : myCollection){
-            if (sg.getId() == id){
-                myCollection.remove(sg);
-                Main.logger.info("Успешно удалено");
-                return;
-            }
-        }
+        myCollection.removeIf(studyGroup -> studyGroup.getId().equals(id));
     }
 
     /**
@@ -141,32 +129,20 @@ public class CollectionManager {
      * Remove element by Index
      * @param index Index
      */
-    public void removeByIndex(Integer index){
-        int ind = 0;
-        for (StudyGroup st : myCollection){
-            if(ind == index){
-                myCollection.remove(st);
-                Main.logger.info("Успешно удалено");
-                return;
-            }
-            ind++;
-        }
+    public void removeByIndex(int index){
+        myCollection.remove(index);
 
     }
-
     /**
      * Add if ID of element bigger then max in collection
      * @param sg Element
      */
-    public void AddIfMax(StudyGroup sg){
-        for (StudyGroup studyGroup : myCollection){
-            if (sg.getId() <= studyGroup.getId()){
-                Main.logger.info("Нельзя добавить.");
-                return;
-            }
-        }
-        myCollection.add(sg);
-        Main.logger.info("Успешно добавленно");
+    public void AddIfMax(StudyGroup sg) {
+        if (myCollection.stream()
+                .map(studyGroup -> studyGroup.getNum())
+                .max(Long::compareTo)
+                .get() < sg.getNum())
+            myCollection.add(sg);
     }
 
     /**
@@ -175,14 +151,10 @@ public class CollectionManager {
      * @return List of elements
      */
     public String LessExpelled(int max){
-        String list = "";
-
-        for (StudyGroup sg : myCollection){
-            if (sg.getExpelledStudents() < max){
-                list += sg.toString() + "\n";
-            }
-        }
-        return list;
+        return myCollection.stream()
+                .filter(studyGroup -> studyGroup.getExpelledStudents() < max)
+                .reduce("", (sum, m) -> sum += m + "\n\n", (sum1, sum2) -> sum1 + sum2)
+                .trim();
     }
 
     /**
@@ -191,14 +163,10 @@ public class CollectionManager {
      * @return List of elements
      */
     public String StartsWithName(String start){
-        String list = "";
-
-        for (StudyGroup sg : myCollection){
-            if (sg.getName().startsWith(start.trim())){
-                list += sg.toString() + "\n";
-            }
-        }
-        return list;
+        return myCollection.stream()
+                .filter(studyGroup -> studyGroup.getName().startsWith(start))
+                .reduce("", (sum, m) -> sum += m + "\n\n", (sum1, sum2) -> sum1 + sum2)
+                .trim();
     }
 
     /**
@@ -206,15 +174,6 @@ public class CollectionManager {
      * @param num StudentsCount that should be deleted
      */
     public void DeleteByStudentsCount(int num){
-        Stack<StudyGroup> bufferCollection = new Stack<StudyGroup>();
-        for (StudyGroup sg : myCollection){
-            if (sg.getStudentsCount() == num){
-                bufferCollection.add(sg);
-            }
-        }
-        if(bufferCollection.size() != 0) {
-            myCollection.removeAll(bufferCollection);
-            Main.logger.info("Удалено: " + bufferCollection.size());
-        }
+        myCollection.removeIf(studyGroup -> studyGroup.getStudentsCount() == num);
     }
 }
