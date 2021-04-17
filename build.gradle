@@ -16,8 +16,8 @@ project(':server') {
     dependencies {
         implementation project(':general')
         implementation 'com.google.code.gson:gson:2.8.6'
-        compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.1'
-        compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.1'
+        compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.1'
+        compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.1'
     }
     jar {
         manifest {
