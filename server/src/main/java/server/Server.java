@@ -57,11 +57,11 @@ public class Server {
      */
     private  void closeSocket(){
         try{
-            Main.logger.info("Пытаюсь закрыть сокет");
+            Main.logger.info("Пытаюсь закрыть сервер");
             socketChannel.close();
-            Main.logger.info("Сокет успешно закрыт");
+            Main.logger.info("Сервер успешно закрыт");
         } catch (IOException exception) {
-            Main.logger.error("Ошибка при закрытии сокета");
+            Main.logger.error("Ошибка при закрытии сервера");
         }
     }
 
@@ -69,7 +69,6 @@ public class Server {
      * Wait for client and set connection with him
      */
     private void startTransmission(){
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
         try {
             Main.logger.info("Вхожу в ожидание соединения");
             clientChanel = socketChannel.accept();
@@ -140,9 +139,9 @@ public class Server {
     public void run() {
         if (!openSocket())
             return;
-        boolean wokrking = true;
+        boolean working = true;
         boolean reconect = true;
-        while (wokrking) {
+        while (working) {
             if (reconect){
                 startTransmission();
                 reconect = false;
@@ -162,9 +161,13 @@ public class Server {
                 continue;
             }
             if (answerMsg.getStatus() == Status.EXIT)
-                wokrking = false;
+                working = false;
         }
         Main.logger.info("Конец завершение работы");
+        Main.logger.info("Сохранение коллекции");
+        AnswerMsg answerMsg = new AnswerMsg();
+        commandManager.executeCommand(new CommandMsg("save", null, null), answerMsg);
+        Main.logger.info("Сохранание прошло со следующим сообщением: " + answerMsg.getMessage().trim());
         endTransmission();
         closeSocket();
     }

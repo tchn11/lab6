@@ -27,6 +27,7 @@ public class Client {
     public int attempts = 0;
 
     private ObjectOutputStream serverWriter;
+
     private ObjectInputStream serverReader;
 
     private Socket socket;
@@ -57,10 +58,10 @@ public class Client {
             serverReader = new ObjectInputStream(socket.getInputStream());
             print("Получено разрешение на чтение");
         } catch (UnknownHostException e) {
-            printErr("Неизвестный хост: " + serverHost);
+            printErr("Неизвестный хост: " + serverHost + "\n");
             return false;
         } catch (IOException exception) {
-            printErr("Ошибка открытия порта " + serverPort);
+            printErr("Ошибка открытия порта " + serverPort + "\n");
             return false;
         }
         print("Порт успешно открыт.");
@@ -107,8 +108,9 @@ public class Client {
             socket.close();
             serverReader.close();
             serverWriter.close();
+            print("Соеденение успешно закрыто");
         } catch (IOException exception) {
-            printErr("Ошибка закртия файлов");
+            printErr("Ошибка закрытия файлов");
         }
     }
 
@@ -158,8 +160,7 @@ public class Client {
                     try {
                         Thread.sleep(connectionTimeout);
                     } catch (InterruptedException exception) {
-                        printErr("Произошла ошибка при попытке ожидания подключения!");
-                        print("Повторное подключение будет произведено немедленно.");
+                        printErr("Произошла ошибка при попытке ожидания подключения");
                     }
                 }
                 if (wasSend){
@@ -171,10 +172,10 @@ public class Client {
             }
             if (answ != null) {
                 if (answ.getStatus() == Status.ERROR) {
-                    print("При выполнении приграммы произошла ошибка");
-                    print(answ.getMessage());
+                    print("При выполнении программы произошла ошибка");
+                    print(answ.getMessage().trim());
                 } else {
-                    print(answ.getMessage());
+                    print(answ.getMessage().trim());
                 }
                 if (answ.getStatus() == Status.EXIT) {
                     work = false;

@@ -6,6 +6,9 @@ import server.collection.CollectionManager;
 import server.commands.*;
 import server.file.FileManager;
 
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+
 /**
  * Main class for server
  * @author Konanykhina Antonina
@@ -16,6 +19,11 @@ public class Main {
     public static final int CONNECTION_TIMEOUT = 60000;
 
     public static void main(String[] args) {
+        try {
+            System.setOut(new PrintStream(System.out, true, "windows-1251"));
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("Code error");
+        }
         String path = System.getenv().get("WAY_OF_THE_NINJA");
         if (path == null) {
             logger.error("Нет переменной с загрузочным файлом");
